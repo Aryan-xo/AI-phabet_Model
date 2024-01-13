@@ -1,109 +1,44 @@
-### Digit Recognition AI Model
-This project implements a simple digit recognition AI model using the MNIST dataset. The model is implemented in Python with TensorFlow and NumPy. It includes the following steps:
+# Digit Recognition AI Model
 
-# Installation and Dependencies
-bash
-Copy code
-pip install pandas numpy matplotlib tensorflow
-Loading and Preprocessing the Data
-python
-Copy code
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import tensorflow as tf
+## Overview
+This project implements a simple digit recognition AI model using the MNIST dataset. The primary goal is to recognize handwritten digits from 0 to 9. The model is implemented in Python using TensorFlow and NumPy.
 
-# Load and preprocess the MNIST dataset
-(X_train, Y_train), (X_test, Y_test) = tf.keras.datasets.mnist.load_data()
-X_train = X_train.reshape(-1, 784).astype('float32') / 255.0
-X_test = X_test.reshape(-1, 784).astype('float32') / 255.0
-Y_train = Y_train.astype('int32')
-Y_test = Y_test.astype('int32')
+## Dataset
+The MNIST dataset consists of 28x28 pixel grayscale images of handwritten digits. It is a widely used dataset for training and testing image processing systems.
 
-# Split the dataset into training and validation sets
-from sklearn.model_selection import train_test_split
-X_train, X_val, Y_train, Y_val = train_test_split(X_train, Y_train, test_size=0.1, random_state=42)
-Visualizing the Data
-python
-Copy code
-import random
+## Model Architecture
+The model consists of three layers:
 
-# Display a random sample from the dataset
-index_to_display = random.randint(0, len(X_test) - 1)
-sample_image = X_train[index_to_display].reshape(28, 28)
+1. **Input Layer:** 784 neurons (28x28 pixels) representing each pixel in the input image.
+2. **Hidden Layer 1:** 128 neurons with a sigmoid activation function.
+3. **Hidden Layer 2:** 64 neurons with a sigmoid activation function.
+4. **Output Layer:** 10 neurons corresponding to the digits 0 through 9, with a sigmoid activation function.
 
-plt.imshow(sample_image, cmap='gray')
-plt.title(f'Label: {Y_train[index_to_display]}')
-plt.show()
-Model Implementation
-python
-Copy code
-# Model parameters
-i = 784
-h1 = 128
-h2 = 64
-o = 10
-lr = 0.01
-epochs = 15
+## Mathematics Behind the Model
+### Forward Propagation
+1. The input image is flattened into a vector of 784 values.
+2. The dot product of the input vector and the weights of the first layer is computed, and the bias is added.
+3. The sigmoid activation function is applied to the result.
+4. Steps 2 and 3 are repeated for the subsequent hidden layers and the output layer.
 
-# ... (code for initializing weights, biases, and activation functions)
+### Back Propagation
+1. The predicted output is compared to the actual label using the cross-entropy loss.
+2. The gradients with respect to the weights and biases are calculated using the chain rule.
+3. The weights and biases are updated using gradient descent to minimize the loss.
 
-# Training loop
-for ep in range(epochs):
-    # ... (training code)
+## Training
+The model is trained using the MNIST training dataset, and its performance is evaluated on a validation set. The training loop runs for a specified number of epochs, adjusting the weights and biases to improve accuracy.
 
-    # Print results at the end of each epoch
-    print(f"Epoch {ep + 1}/{epochs} - Average Cost: {total_cost / len(X_train):.4f}, Training Accuracy: {correct_predictions / len(X_train) * 100:.2f}%, Validation Accuracy: {accuracy_val * 100:.2f}%")
-Testing the Model
-python
-Copy code
-# Display an image from the X_test set
-index_to_display = random.randint(0, len(X_test) - 1)
-sample_image = X_test[index_to_display].reshape(28, 28)
+## Testing
+The model is tested on a separate test set to evaluate its generalization performance. The accuracy on the test set provides insights into how well the model performs on unseen data.
 
-plt.imshow(sample_image, cmap='gray')
-plt.title(f"True Label: {Y_test[index_to_display]}")
-plt.show()
+## Results
+The training loop prints the average cost (cross-entropy loss), training accuracy, and validation accuracy at the end of each epoch. These metrics help monitor the model's progress during training.
 
-# Use the classify function to get model's output
-image_to_classify = X_test[index_to_display]
-predictions = classify(image_to_classify, W1, b1, W2, b2, W3, b3)
+## Exporting and Loading Model Weights
+The weights and biases learned during training can be exported to numpy files for later use. This allows the model to be loaded with pre-trained parameters for quick predictions or further fine-tuning.
 
-# Determine the most likely predicted digit
-predicted_digit = np.argmax(predictions)
-print(f"Predicted Digit: {predicted_digit}")
-Model Evaluation
-python
-Copy code
-# Evaluate the model on the test set
-correct_predictions = 0
+## Conclusion
+This digit recognition AI model showcases the fundamentals of neural networks and provides a practical example of image classification. The mathematics involved in forward and backward propagation are essential components of understanding how neural networks learn from data.
 
-for i in range(len(X_test)):
-    image_to_classify = X_test[i]
-    predictions = classify(image_to_classify, W1, b1, W2, b2, W3, b3)
-    predicted_digit = np.argmax(predictions)
-
-    if predicted_digit == Y_test[i]:
-        correct_predictions += 1
-
-accuracy = correct_predictions / len(X_test) * 100
-print(f"Accuracy on Test Set: {accuracy:.2f}%")
-Exporting and Loading Model Weights
-python
-Copy code
-# Export weights and biases as numpy files
-np.save('W1.npy', W1)
-np.save('b1.npy', b1)
-np.save('W2.npy', W2)
-np.save('b2.npy', b2)
-np.save('W3.npy', W3)
-np.save('b3.npy', b3)
-
-# Load weights and biases from numpy files
-loaded_W1 = np.load('W1.npy')
-loaded_b1 = np.load('b1.npy')
-loaded_W2 = np.load('W2.npy')
-loaded_b2 = np.load('b2.npy')
-loaded_W3 = np.load('W3.npy')
-loaded_b3 = np.load('b3.npy')
-Feel free to customize the README according to your project details and structure. If you have additional sections or information, include them for a comprehensive README.
+Feel free to explore the code and adapt the model for your specific use cases or datasets. The provided Python code demonstrates the implementation details of the model, and you can further customize it based on your requirements.
